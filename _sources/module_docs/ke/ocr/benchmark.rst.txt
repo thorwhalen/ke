@@ -1,0 +1,4 @@
+ke.ocr.benchmark
+================
+.. automodule:: ke.ocr.benchmark
+   :members:

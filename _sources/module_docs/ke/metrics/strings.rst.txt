@@ -1,0 +1,4 @@
+ke.metrics.strings
+==================
+.. automodule:: ke.metrics.strings
+   :members:

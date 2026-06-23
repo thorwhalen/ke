@@ -1,0 +1,19 @@
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   module_docs/ke
+   module_docs/ke/__main__
+   module_docs/ke/base
+   module_docs/ke/canonicalize
+   module_docs/ke/facade
+   module_docs/ke/metrics
+   module_docs/ke/metrics/fields
+   module_docs/ke/metrics/strings
+   module_docs/ke/ocr
+   module_docs/ke/ocr/benchmark
+   module_docs/ke/ocr/bridge
+   module_docs/ke/ocr/profiles
+   module_docs/ke/registry
+   module_docs/ke/stores
+   module_docs/ke/tools
