@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ke/base.html">ke.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ke/canonicalize.html">ke.canonicalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ke/facade.html">ke.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/ke/harness.html">ke.harness</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ke/metrics.html">ke.metrics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ke/metrics/fields.html">ke.metrics.fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/ke/metrics/graphs.html">ke.metrics.graphs</a></li>
@@ -181,14 +182,20 @@
       </ul></li>
       <li><a href="module_docs/ke/tools.html#ke.tools.cer">cer() (in module ke.tools)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke/tools.html#ke.tools.check">check() (in module ke.tools)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke.html#ke.check_requirements">check_requirements() (in module ke)</a>
 
       <ul>
         <li><a href="module_docs/ke/registry.html#ke.registry.check_requirements">(in module ke.registry)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ke.html#ke.cohen_kappa">cohen_kappa() (in module ke)</a>
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#ke.harness.cohen_kappa">(in module ke.harness)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/ke/canonicalize.html#ke.canonicalize.collapse_whitespace">collapse_whitespace() (in module ke.canonicalize)</a>
@@ -263,14 +270,14 @@
 </li>
       <li><a href="module_docs/ke/tools.html#ke.tools.engines">engines() (in module ke.tools)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke.html#ke.estimate_quality">estimate_quality() (in module ke)</a>
 
       <ul>
         <li><a href="module_docs/ke/facade.html#ke.facade.estimate_quality">(in module ke.facade)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke.html#ke.evaluate">evaluate() (in module ke)</a>
 
       <ul>
@@ -281,6 +288,12 @@
 
       <ul>
         <li><a href="module_docs/ke/ocr/benchmark.html#ke.ocr.benchmark.evaluate_ocr">(in module ke.ocr.benchmark)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/ke.html#ke.evaluate_store">evaluate_store() (in module ke)</a>
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#ke.harness.evaluate_store">(in module ke.harness)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -329,6 +342,12 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ke.html#ke.GateResult">GateResult (class in ke)</a>
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#ke.harness.GateResult">(class in ke.harness)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ke.html#ke.get">get() (in module ke)</a>
 
       <ul>
@@ -394,6 +413,13 @@
 
       <ul>
         <li><a href="module_docs/ke/facade.html#module-ke.facade">module</a>
+</li>
+      </ul></li>
+      <li>
+    ke.harness
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#module-ke.harness">module</a>
 </li>
       </ul></li>
       <li>
@@ -477,11 +503,25 @@
       </ul></li>
       <li><a href="module_docs/ke/stores.html#ke.stores.KINDS">KINDS (in module ke.stores)</a>
 </li>
+      <li><a href="module_docs/ke.html#ke.krippendorff_alpha">krippendorff_alpha() (in module ke)</a>
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#ke.harness.krippendorff_alpha">(in module ke.harness)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ke.html#ke.load_baseline">load_baseline() (in module ke)</a>
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#ke.harness.load_baseline">(in module ke.harness)</a>
+</li>
+      </ul></li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke/canonicalize.html#ke.canonicalize.lower">lower() (in module ke.canonicalize)</a>
 </li>
@@ -524,6 +564,8 @@
         <li><a href="module_docs/ke/canonicalize.html#module-ke.canonicalize">ke.canonicalize</a>
 </li>
         <li><a href="module_docs/ke/facade.html#module-ke.facade">ke.facade</a>
+</li>
+        <li><a href="module_docs/ke/harness.html#module-ke.harness">ke.harness</a>
 </li>
         <li><a href="module_docs/ke/metrics.html#module-ke.metrics">ke.metrics</a>
 </li>
@@ -608,20 +650,26 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ke.html#ke.percent_agreement">percent_agreement() (in module ke)</a>
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#ke.harness.percent_agreement">(in module ke.harness)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ke.html#ke.persistent_cache">persistent_cache() (in module ke)</a>
 
       <ul>
         <li><a href="module_docs/ke/stores.html#ke.stores.persistent_cache">(in module ke.stores)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke/ocr.html#ke.ocr.profile">profile() (in module ke.ocr)</a>
 
       <ul>
         <li><a href="module_docs/ke/ocr/profiles.html#ke.ocr.profiles.profile">(in module ke.ocr.profiles)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke.html#ke.Provenance">Provenance (class in ke)</a>
 
       <ul>
@@ -658,14 +706,20 @@
         <li><a href="module_docs/ke/registry.html#ke.registry.register">(in module ke.registry)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/ke.html#ke.regression_gate">regression_gate() (in module ke)</a>
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#ke.harness.regression_gate">(in module ke.harness)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke.html#ke.Report">Report (class in ke)</a>
 
       <ul>
         <li><a href="module_docs/ke/base.html#ke.base.Report">(class in ke.base)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke.html#ke.requires_extra">requires_extra() (in module ke)</a>
 
       <ul>
@@ -686,6 +740,12 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/ke.html#ke.save_baseline">save_baseline() (in module ke)</a>
+
+      <ul>
+        <li><a href="module_docs/ke/harness.html#ke.harness.save_baseline">(in module ke.harness)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/ke.html#ke.Score">Score (class in ke)</a>
 
       <ul>
@@ -704,14 +764,14 @@
         <li><a href="module_docs/ke/base.html#ke.base.Severity">(class in ke.base)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke.html#ke.Signal">Signal (class in ke)</a>
 
       <ul>
         <li><a href="module_docs/ke/base.html#ke.base.Signal">(class in ke.base)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/ke/canonicalize.html#ke.canonicalize.Canonicalizer.steps">steps (ke.canonicalize.Canonicalizer property)</a>
 
       <ul>
