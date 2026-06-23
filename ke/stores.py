@@ -40,7 +40,7 @@ from config2py import AppData
 cache_this = dol.cache_this
 
 #: The kinds of artifact ``ke`` persists; each becomes a subfolder + a store.
-KINDS = ("gold", "results", "calibrators", "corrections", "runs")
+KINDS = ("gold", "results", "calibrators", "corrections", "runs", "baselines")
 
 _APP = AppData("ke")
 

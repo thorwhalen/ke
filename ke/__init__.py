@@ -65,6 +65,16 @@ from .base import (
 )
 from .canonicalize import Canonicalizer, default_canonicalizer
 from .facade import estimate_quality, evaluate, score
+from .harness import (
+    GateResult,
+    cohen_kappa,
+    evaluate_store,
+    krippendorff_alpha,
+    load_baseline,
+    percent_agreement,
+    regression_gate,
+    save_baseline,
+)
 from .metrics import (
     FieldMetric,
     StringMetric,
@@ -88,6 +98,15 @@ __all__ = [
     "score",
     "evaluate",
     "estimate_quality",
+    # offline harness
+    "evaluate_store",
+    "save_baseline",
+    "load_baseline",
+    "regression_gate",
+    "GateResult",
+    "cohen_kappa",
+    "percent_agreement",
+    "krippendorff_alpha",
     # Layer A (schema SSOT)
     "GraphGrammar",
     "FieldSpec",

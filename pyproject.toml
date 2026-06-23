@@ -55,6 +55,8 @@ agreement = ["uqlm"]
 # OCR fleet (the first concrete instance). Install specific engines via ocracy's
 # own per-backend extras, e.g. ocracy[tesseract], ocracy[google-vision].
 ocr = ["ocracy"]
+# Inter-annotator agreement for the gold-standard harness.
+harness = ["krippendorff"]
 # Human-in-the-loop review surface + label-free monitoring.
 hitl = ["label-studio-sdk"]
 monitoring = ["nannyml", "evidently"]
@@ -63,7 +65,7 @@ all = [
     "networkx", "sacrebleu", "seqeval", "nervaluate", "apted", "zss",
     "netcal", "scikit-learn", "mapie", "crepes",
     "pydantic", "pandera", "jsonschema", "symspellpy", "pyod", "scipy",
-    "ocracy", "uqlm",
+    "ocracy", "uqlm", "krippendorff",
 ]
 # --- tooling ---
 dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy"]
