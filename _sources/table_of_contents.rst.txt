@@ -9,6 +9,7 @@
    module_docs/ke/facade
    module_docs/ke/metrics
    module_docs/ke/metrics/fields
+   module_docs/ke/metrics/graphs
    module_docs/ke/metrics/strings
    module_docs/ke/ocr
    module_docs/ke/ocr/benchmark
