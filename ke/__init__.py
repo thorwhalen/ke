@@ -65,7 +65,14 @@ from .base import (
 )
 from .canonicalize import Canonicalizer, default_canonicalizer
 from .facade import estimate_quality, evaluate, score
-from .metrics import FieldMetric, StringMetric
+from .metrics import (
+    FieldMetric,
+    StringMetric,
+    TypedEdge,
+    TypedGraph,
+    TypedGraphMetric,
+    TypedNode,
+)
 from .registry import (
     check_requirements,
     get,
@@ -116,6 +123,10 @@ __all__ = [
     # metrics
     "StringMetric",
     "FieldMetric",
+    "TypedGraphMetric",
+    "TypedGraph",
+    "TypedNode",
+    "TypedEdge",
     # registry
     "register",
     "get",

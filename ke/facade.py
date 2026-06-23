@@ -39,6 +39,7 @@ from .base import (
 )
 from .canonicalize import resolve_canonicalizer
 from .metrics.fields import FieldMetric
+from .metrics.graphs import TypedGraph, TypedGraphMetric
 from .metrics.strings import StringMetric
 from .registry import get
 
@@ -48,6 +49,8 @@ def _is_text_like(x: Any) -> bool:
 
 
 def _default_metric_name(pred: Any, gold: Any) -> str:
+    if isinstance(pred, TypedGraph) and isinstance(gold, TypedGraph):
+        return "graph"
     if _is_text_like(pred) and _is_text_like(gold):
         return "cer"
     if isinstance(pred, Mapping) and isinstance(gold, Mapping):
@@ -59,9 +62,9 @@ def _default_metric_name(pred: Any, gold: Any) -> str:
 
 
 def _resolve_metric(
-    metric: Union[None, str, Metric], pred: Any, gold: Any, canonicalizer
+    metric: Union[None, str, Metric], pred: Any, gold: Any, canonicalizer, weights=None
 ) -> Metric:
-    """Coerce ``metric`` to a callable, injecting a canonicalizer into built-ins."""
+    """Coerce ``metric`` to a callable, injecting canonicalizer/weights into built-ins."""
     if metric is not None and not isinstance(metric, str):
         return metric  # already a callable Metric
     name = metric or _default_metric_name(pred, gold)
@@ -69,6 +72,8 @@ def _resolve_metric(
         return StringMetric(mode=name, canonicalizer=canonicalizer)
     if name == "fields":
         return FieldMetric(canonicalizer=canonicalizer)
+    if name in ("graph", "typed_graph"):
+        return TypedGraphMetric(weights=weights)
     return get("metrics", name)  # registered custom metric
 
 
@@ -103,13 +108,14 @@ def score(
             callable :class:`~ke.base.Metric`, or ``None`` to dispatch by type.
         normalize: Optional canonicalizer (name, callable, step list, or
             :class:`~ke.canonicalize.Canonicalizer`) applied before comparison.
-        weights: Reserved for cost-weighted metrics (the typed-graph distance).
+        weights: A :data:`~ke.base.CostWeight` for cost-weighted metrics (the
+            typed-graph distance); overrides the schema's importance weights.
 
     Returns:
         A :class:`~ke.base.Score`.
     """
     canon = resolve_canonicalizer(normalize)
-    m = _resolve_metric(metric, pred, gold, canon)
+    m = _resolve_metric(metric, pred, gold, canon, weights)
     return m(pred, gold, grammar=grammar)
 
 
@@ -119,6 +125,7 @@ def evaluate(
     metric: Union[None, str, Metric] = None,
     grammar: Optional[GraphGrammar] = None,
     normalize: Any = None,
+    weights: Any = None,
 ) -> Report:
     """Aggregate many comparisons into a :class:`~ke.base.Report` (corpus level).
 
@@ -137,7 +144,7 @@ def evaluate(
     if not cases:
         return Report(metric=metric if isinstance(metric, str) else "", n=0)
     p0, g0 = cases[0][0], cases[0][1]
-    m = _resolve_metric(metric, p0, g0, canon)
+    m = _resolve_metric(metric, p0, g0, canon, weights)
 
     scores: list = []
     by_slice: dict = {}
