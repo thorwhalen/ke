@@ -18,11 +18,22 @@ from __future__ import annotations
 
 from ..registry import register
 from .fields import FieldMetric
+from .graphs import TypedEdge, TypedGraph, TypedGraphMetric, TypedNode
 from .strings import StringMetric
 
-# Register the built-in metrics (idempotent; import side effect).
+# Register the built-in metrics (idempotent; import side effect). Constructing
+# TypedGraphMetric does NOT import networkx -- that happens lazily on __call__.
 register("metrics", "cer", StringMetric(mode="cer"))
 register("metrics", "wer", StringMetric(mode="wer"))
 register("metrics", "fields", FieldMetric())
+register("metrics", "graph", TypedGraphMetric())
+register("metrics", "typed_graph", TypedGraphMetric())
 
-__all__ = ["StringMetric", "FieldMetric"]
+__all__ = [
+    "StringMetric",
+    "FieldMetric",
+    "TypedGraphMetric",
+    "TypedGraph",
+    "TypedNode",
+    "TypedEdge",
+]
