@@ -8,6 +8,10 @@ This gate reads a ``pip-licenses`` CSV of the *installed* closure and rejects:
 - GPL / AGPL (but allows LGPL -- acceptable for dynamically-linked libraries)
 - Any non-commercial / source-available restriction (RAIL, CC-BY-NC, BUSL, ...)
 
+Two audited override lists (``_ALLOWLIST``, ``_ALLOWLIST_PREFIXES``) clear the
+handful of packages whose metadata trips a substring without carrying the
+restriction this gate is about. Every entry must be justified in a comment.
+
 Usage:
     pip-licenses --format=csv --with-system > licenses.csv
     python .github/scripts/check_licenses.py licenses.csv
@@ -40,8 +44,47 @@ _NON_COMMERCIAL = (
 # Keep this list short and justified; it is the audited override.
 _ALLOWLIST: set[str] = set()
 
+# Name *prefixes* cleared for the same reason. A prefix (rather than ~15 exact
+# names) is used only where the package family churns with every release of its
+# parent, so an exact list would silently rot.
+#
+#   nvidia-*  The CUDA redistributable wheels (cublas, cudnn, nccl, nvjitlink,
+#             cusparselt, nvshmem, ...) that `torch` pulls in transitively via
+#             `uqlm`. Their metadata reads "NVIDIA Proprietary" /
+#             "Other/Proprietary License", which trips the PROPRIETARY
+#             substring above -- but this gate exists to catch *copyleft* and
+#             *non-commercial* terms, and the CUDA Toolkit EULA grants
+#             redistribution and commercial use of exactly these runtime
+#             components. Closed-source is not the same restriction as
+#             non-commercial, and every torch-based install in the ecosystem
+#             carries them. The set changes name-by-name each torch release,
+#             which is why this is a prefix.
+_ALLOWLIST_PREFIXES: tuple[str, ...] = ("nvidia-",)
+
+
+def _is_allowlisted(name: str) -> bool:
+    """Whether ``name`` is an audited override (exact name or cleared prefix).
+
+    >>> _is_allowlisted("krippendorff")
+    False
+    >>> _is_allowlisted("nvidia-cudnn-cu13")
+    True
+    """
+    return name in _ALLOWLIST or name.lower().startswith(_ALLOWLIST_PREFIXES)
+
 
 def _is_violation(license_text: str) -> str:
+    """The reason ``license_text`` is forbidden, or ``""`` if it is acceptable.
+
+    >>> _is_violation("MIT")
+    ''
+    >>> _is_violation("GPL-3.0-or-later")
+    'GPL/AGPL copyleft'
+    >>> _is_violation("LGPL-3.0")
+    ''
+    >>> _is_violation("CC-BY-NC-4.0")
+    'non-commercial / source-available'
+    """
     up = license_text.upper()
     if any(nc in up for nc in _NON_COMMERCIAL):
         return "non-commercial / source-available"
@@ -56,7 +99,7 @@ def main(path: str) -> int:
         for row in csv.DictReader(f):
             name = (row.get("Name") or "").strip()
             license_text = (row.get("License") or "").strip()
-            if name in _ALLOWLIST:
+            if _is_allowlisted(name):
                 continue
             reason = _is_violation(license_text)
             if reason:
