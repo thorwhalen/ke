@@ -135,6 +135,14 @@ doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 [tool.wads.ci]
 project_name = ""
 
+[tool.wads.ci.install]
+# Unset, wads installs core dependencies only. The flagship metric's module
+# doctest (ke/metrics/graphs.py) constructs a TypedGraphMetric, which needs
+# `networkx` from the `metrics` extra -- without it that documented example
+# cannot be verified in CI. `metrics` is permissive-only (BSD/MIT/Apache), so
+# installing it here does not weaken the license gate.
+extras = "metrics"
+
 [tool.wads.ci.commands]
 pre_test = []
 test = []
