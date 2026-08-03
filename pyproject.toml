@@ -21,7 +21,12 @@ authors = [{ name = "Thor Whalen" }]
 # opt-in extra (see [project.optional-dependencies]); nothing copyleft/non-commercial
 # is ever a default. See skills/ke-dev-licensing for the policy and landmines.
 dependencies = [
-    "dol",        # local-file key-value stores (MutableMapping facades)
+    # >=0.3.45: 0.3.44 and earlier compiled `filter_regex` with `safe_compile`,
+    # which re.escape's its input on Windows. That silently broke the `.json`
+    # suffix filter behind `dol.Jsons` -- the store class every ke store is built
+    # on -- so every write raised `KeyError: 'Key not in store: <key>.json'` on
+    # Windows only. See ke CI run 28001868919 and dol PR #64.
+    "dol>=0.3.45",  # local-file key-value stores (MutableMapping facades)
     "config2py",  # ~/.local/share/ke/ XDG data-folder resolution
     "jiwer",      # CER/WER (Apache-2.0; rapidfuzz C++ core)
     "rapidfuzz",  # MIT edit distance -- the permissive replacement for GPL Levenshtein
