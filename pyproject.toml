@@ -124,7 +124,12 @@ convention = "google"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-testpaths = ["tests"]
+# `ke` is listed alongside `tests` on purpose. CI runs `pytest --doctest-modules`
+# with no path argument, so collection is driven entirely by `testpaths`; with
+# `["tests"]` alone every doctest in the package was collected by nobody and the
+# suite still reported green. Keep the package dir here so the examples in the
+# module docstrings stay executable documentation.
+testpaths = ["tests", "ke"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 
 [tool.wads.ci]
