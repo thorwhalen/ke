@@ -7,9 +7,11 @@ a general problem, so the core is source-agnostic and the OCR pieces are optiona
 ```python
 import ke
 
-ke.score("hello wrld", "hello world")          # -> Score(value=0.0909..., metric='cer')
-ke.score("hello wrld", "hello world", metric="wer").value   # 0.5
-ke.evaluate([("ct", "cat"), ("dg", "dog")], metric="cer").aggregate   # 0.333... (global CER)
+ke.score("hello wrld", "hello world")  # -> Score(value=0.0909..., metric='cer')
+ke.score("hello wrld", "hello world", metric="wer").value  # 0.5
+ke.evaluate(
+    [("ct", "cat"), ("dg", "dog")], metric="cer"
+).aggregate  # 0.333... (global CER)
 ```
 
 ## What it does
@@ -37,13 +39,23 @@ benchmark any of its ~16 engines — or any `image -> OcrResult` callable of you
 ```python
 import ke.ocr
 
-gold = {"inv-1": {"image": "scan.png", "reference_text": "INVOICE 2024", "slice": "invoices"}}
+gold = {
+    "inv-1": {
+        "image": "scan.png",
+        "reference_text": "INVOICE 2024",
+        "slice": "invoices",
+    }
+}
 report = ke.ocr.evaluate_ocr(
-    "ocrmac", gold, metric="cer", normalize=["lower", "collapse_whitespace"], persist=True,
+    "ocrmac",
+    gold,
+    metric="cer",
+    normalize=["lower", "collapse_whitespace"],
+    persist=True,
 )
-report.aggregate          # corpus CER
-report.per_slice          # CER per document slice
-report.detail["per_item"] # prediction, reference, score, confidence per document
+report.aggregate  # corpus CER
+report.per_slice  # CER per document slice
+report.detail["per_item"]  # prediction, reference, score, confidence per document
 ```
 
 Gold corpora, results, and runs persist to local `dol` stores under

@@ -211,7 +211,9 @@ def estimate_quality(
 
     did_calibrate = calibrator is not None and base is not None
     calibrated = calibrator(base) if did_calibrate else base
-    decision = policy(calibrated) if (policy is not None and calibrated is not None) else None
+    decision = (
+        policy(calibrated) if (policy is not None and calibrated is not None) else None
+    )
 
     return QualityReport(
         calibrated_confidence=calibrated,
