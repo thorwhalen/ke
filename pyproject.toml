@@ -21,7 +21,12 @@ authors = [{ name = "Thor Whalen" }]
 # opt-in extra (see [project.optional-dependencies]); nothing copyleft/non-commercial
 # is ever a default. See skills/ke-dev-licensing for the policy and landmines.
 dependencies = [
-    "dol",        # local-file key-value stores (MutableMapping facades)
+    # >=0.3.45: 0.3.44 and earlier compiled `filter_regex` with `safe_compile`,
+    # which re.escape's its input on Windows. That silently broke the `.json`
+    # suffix filter behind `dol.Jsons` -- the store class every ke store is built
+    # on -- so every write raised `KeyError: 'Key not in store: <key>.json'` on
+    # Windows only. See ke CI run 28001868919 and dol PR #64.
+    "dol>=0.3.45",  # local-file key-value stores (MutableMapping facades)
     "config2py",  # ~/.local/share/ke/ XDG data-folder resolution
     "jiwer",      # CER/WER (Apache-2.0; rapidfuzz C++ core)
     "rapidfuzz",  # MIT edit distance -- the permissive replacement for GPL Levenshtein
@@ -56,29 +61,40 @@ agreement = ["uqlm"]
 # own per-backend extras, e.g. ocracy[tesseract], ocracy[google-vision].
 ocr = ["ocracy"]
 # Inter-annotator agreement for the gold-standard harness.
+# NOTE: `krippendorff` is GPL-3.0-or-later. It is import-only (loaded lazily
+# inside `ke.harness.krippendorff_alpha`, behind `@requires_extra`), never
+# vendored, and deliberately EXCLUDED from `all` -- installing it is an explicit
+# act by a user who accepts GPL terms. `cohen_kappa` and `percent_agreement`
+# cover the permissive IAA cases with no extra at all. See issue on replacing
+# this with a permissive alpha implementation.
 harness = ["krippendorff"]
 # Human-in-the-loop review surface + label-free monitoring.
 hitl = ["label-studio-sdk"]
 monitoring = ["nannyml", "evidently"]
-# Convenience aggregate of the permissive capability tiers.
+# Convenience aggregate of the permissive capability tiers: metrics +
+# calibration + validation + ocr + agreement. Deliberately does NOT include
+# `harness` (GPL krippendorff) -- `pip install ke[all]` must stay copyleft-free,
+# and the license gate installs exactly this extra to enforce that.
 all = [
     "networkx", "sacrebleu", "seqeval", "nervaluate", "apted", "zss",
     "netcal", "scikit-learn", "mapie", "crepes",
     "pydantic", "pandera", "jsonschema", "symspellpy", "pyod", "scipy",
-    "ocracy", "uqlm", "krippendorff",
+    "ocracy", "uqlm",
 ]
 # --- tooling ---
 dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1.0", "ocracy"]
 docs = ["sphinx>=6.0", "sphinx-rtd-theme>=1.0"]
 
-# NOTE: copyleft / non-commercial libraries are NEVER listed above. They are
-# quarantined and must be installed explicitly by the user who accepts their terms:
+# NOTE: copyleft / non-commercial libraries are NEVER a default and never enter
+# `all`. They are quarantined and must be installed explicitly by the user who
+# accepts their terms:
+#   krippendorff (GPL-3.0-or-later, IAA alpha)-- `ke[harness]`, import-only
 #   TorchCP (LGPL-3.0, graph/LLM conformal)  -- import-only, never vendor
 #   surya-ocr (non-commercial RAIL-M weights) -- highest accuracy, internal research only
 #   Levenshtein / python-Levenshtein (GPL)    -- replaced by rapidfuzz
 #   Potato (GPL-3.0), Prodigy (proprietary)   -- HITL; HTTP-only / design reference
-# The CI license gate (.github/workflows/license-gate.yml) fails the build if any
-# of these resolve into the core..hitl dependency closure.
+# The CI license gate (.github/workflows/license-gate.yml) installs `.[all]` and
+# fails the build if anything copyleft or non-commercial resolves into it.
 
 [tool.ruff]
 line-length = 88
@@ -108,11 +124,24 @@ convention = "google"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-testpaths = ["tests"]
+# `ke` is listed alongside `tests` on purpose. CI runs `pytest --doctest-modules`
+# with no path argument, so collection is driven entirely by `testpaths`; with
+# `["tests"]` alone every doctest in the package was collected by nobody and the
+# suite still reported green. Keep the package dir here so the examples in the
+# module docstrings stay executable documentation.
+testpaths = ["tests", "ke"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 
 [tool.wads.ci]
 project_name = ""
+
+[tool.wads.ci.install]
+# Unset, wads installs core dependencies only. The flagship metric's module
+# doctest (ke/metrics/graphs.py) constructs a TypedGraphMetric, which needs
+# `networkx` from the `metrics` extra -- without it that documented example
+# cannot be verified in CI. `metrics` is permissive-only (BSD/MIT/Apache), so
+# installing it here does not weaken the license gate.
+extras = "metrics"
 
 [tool.wads.ci.commands]
 pre_test = []
@@ -159,7 +188,17 @@ sdist = true
 wheel = true
 
 [tool.wads.ci.publish]
-enabled = true
+# Disabled deliberately -- see issue #12. This repo currently holds a superseded
+# draft of the knowledge-*evaluation* work, which continued as `ek`; the name
+# `ke` is reserved for a future knowledge-*extraction* package. Publishing from
+# here would upload the wrong code to PyPI as `ke`, replacing what is currently
+# published there. Re-enable only when there is knowledge-extraction code worth
+# shipping.
+#
+# With `enabled = false`, `publish_marker` becomes the deliberate override: a
+# commit message containing "[publish]" still forces a release. Docs publishing
+# is unaffected (the github-pages job depends on validation, not on publish).
+enabled = false
 skip_ci_marker = "[skip ci]"
 publish_marker = "[publish]"
 
