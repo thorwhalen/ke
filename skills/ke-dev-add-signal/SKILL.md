@@ -245,7 +245,7 @@ level).
   `config2py.AppData("ke")` → `~/.local/share/ke/`. Stores are facades, never
   god-classes (see the `python-storage` skill).
 - New user-facing functions: add to the `_dispatch_funcs` SSOT and they surface in
-  the CLI via `argh` (`__main__.py` `dispatch_with_namespaces`).
+  the CLI via `cw` (`__main__.py` `dispatch_with_namespaces`).
 
 ## Checklist before you finish
 
