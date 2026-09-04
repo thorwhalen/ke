@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ke.__main__ &mdash; ke 0.1.0 documentation</title>
+  <title>ke.__main__ &mdash; ke 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/documentation_options.js?v=a58bc63e"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -53,6 +53,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">ke.__main__</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ke.__main__.dispatch_with_namespaces"><code class="docutils literal notranslate"><span class="pre">dispatch_with_namespaces()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ke.__main__.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ke.__main__.mk_parser"><code class="docutils literal notranslate"><span class="pre">mk_parser()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="base.html">ke.base</a></li>
@@ -100,19 +101,31 @@
 <span id="ke-main"></span><h1>ke.__main__<a class="headerlink" href="#module-ke.__main__" title="Link to this heading"></a></h1>
 <p>Command-line entry point for <code class="docutils literal notranslate"><span class="pre">ke</span></code> (<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">ke</span></code> / the <code class="docutils literal notranslate"><span class="pre">ke</span></code> script).</p>
 <p>Commands come from <code class="xref py py-data docutils literal notranslate"><span class="pre">ke.tools._dispatch_funcs</span></code> (the SSOT), dispatched with
-<code class="docutils literal notranslate"><span class="pre">argh</span></code> – which reads each function’s signature to build its flags – and
-optionally completed with <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code>. The <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">PYTHON_ARGCOMPLETE_OK</span></code> marker
-on line 1 enables shell tab-completion (after the user activates it).</p>
+<code class="docutils literal notranslate"><span class="pre">cw</span></code> – which reads each function’s signature to build its flags – and optionally
+completed with <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code>. The <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">PYTHON_ARGCOMPLETE_OK</span></code> marker on line 1
+enables shell tab-completion (after the user activates it); <code class="docutils literal notranslate"><span class="pre">cw.run</span></code> is what offers
+the parser to <code class="docutils literal notranslate"><span class="pre">argcomplete</span></code>, at the same point <code class="docutils literal notranslate"><span class="pre">argh</span></code> used to.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ke.__main__.dispatch_with_namespaces">
-<span class="sig-prename descclassname"><span class="pre">ke.__main__.</span></span><span class="sig-name descname"><span class="pre">dispatch_with_namespaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespaced_funcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ke/__main__.html#dispatch_with_namespaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ke.__main__.dispatch_with_namespaces" title="Link to this definition"></a></dt>
-<dd><p>Build an <code class="docutils literal notranslate"><span class="pre">argh</span></code> parser from top-level and namespaced functions and dispatch.</p>
+<span class="sig-prename descclassname"><span class="pre">ke.__main__.</span></span><span class="sig-name descname"><span class="pre">dispatch_with_namespaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespaced_funcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/ke/__main__.html#dispatch_with_namespaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ke.__main__.dispatch_with_namespaces" title="Link to this definition"></a></dt>
+<dd><p>Dispatch top-level and namespaced functions; return the process exit code.</p>
+<p>Returning rather than raising is <code class="docutils literal notranslate"><span class="pre">cw</span></code>’s contract, and the reason both callers
+below wrap it – the console script in <code class="docutils literal notranslate"><span class="pre">sys.exit</span></code>, the <code class="docutils literal notranslate"><span class="pre">__main__</span></code> guard in
+<code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">SystemExit</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="ke.__main__.main">
-<span class="sig-prename descclassname"><span class="pre">ke.__main__.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/ke/__main__.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ke.__main__.main" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">ke.__main__.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/ke/__main__.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ke.__main__.main" title="Link to this definition"></a></dt>
 <dd><p>Entry point registered as the <code class="docutils literal notranslate"><span class="pre">ke</span></code> console script.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ke.__main__.mk_parser">
+<span class="sig-prename descclassname"><span class="pre">ke.__main__.</span></span><span class="sig-name descname"><span class="pre">mk_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespaced_funcs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ArgumentParser</span></span></span><a class="reference internal" href="../../_modules/ke/__main__.html#mk_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ke.__main__.mk_parser" title="Link to this definition"></a></dt>
+<dd><p>Build a parser from top-level and namespaced functions. No parsing, no I/O.</p>
+<p>Returns a plain <code class="xref py py-class docutils literal notranslate"><span class="pre">argparse.ArgumentParser</span></code>, which is what
+<code class="docutils literal notranslate"><span class="pre">argcomplete.autocomplete</span></code> is typed for.</p>
 </dd></dl>
 
 </section>
