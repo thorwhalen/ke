@@ -56,7 +56,7 @@ callable.
 | `ke/metrics/` | reference-based metrics (`StringMetric` CER/WER, `FieldMetric`) |
 | `ke/facade.py` | `score`, `evaluate`, `estimate_quality` |
 | `ke/ocr/` | the OCR instance: ocracy bridge, capability profiles, benchmark |
-| `ke/tools.py`, `ke/__main__.py` | CLI (`argh`, `_dispatch_funcs` SSOT) |
+| `ke/tools.py`, `ke/__main__.py` | CLI (`cw`, `_dispatch_funcs` SSOT) |
 
 Not yet built (roadmap): `ke/qe/` (signals incl. `rover.py`, calibrate, decide),
 `ke/validate.py`, `ke/harness.py`, `ke/review.py`, `ke/monitor.py`. The flagship

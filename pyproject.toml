@@ -30,7 +30,7 @@ dependencies = [
     "config2py",  # ~/.local/share/ke/ XDG data-folder resolution
     "jiwer",      # CER/WER (Apache-2.0; rapidfuzz C++ core)
     "rapidfuzz",  # MIT edit distance -- the permissive replacement for GPL Levenshtein
-    "argh",       # CLI dispatch from function signatures
+    "cw>=0.1.1,<0.2",  # CLI dispatch from function signatures (MIT, no runtime deps)
     "argcomplete",  # shell tab-completion for the CLI
 ]
 

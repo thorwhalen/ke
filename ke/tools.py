@@ -1,7 +1,7 @@
 """Small, CLI-friendly functions over the ``ke`` core (the dispatch surface).
 
 These are thin, string-in/value-out wrappers designed for triple dispatch (CLI via
-``argh``, and later HTTP/UI). The single ``_dispatch_funcs`` list is the SSOT of
+``cw``, and later HTTP/UI). The single ``_dispatch_funcs`` list is the SSOT of
 what :mod:`ke.__main__` exposes, so there is no duplicated command registration.
 
 Run them from the shell::

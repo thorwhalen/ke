@@ -225,7 +225,7 @@ Core protocols: **Metric, Validator, Calibrator, DecisionPolicy/SelectivePolicy,
 | `ke/harness.py` | The slice-aware regression harness: stratified sampling, per-slice reporting, golden-set regression, IAA. |
 | `ke/ocr/` | The `OcrResult` shape + adapters; the optional `ke[ocr]` integration with `ocracy`. |
 | `ke/tools.py` | Shared helpers (`_helper` for same-module-only; no underscore for cross-module reuse). |
-| `ke/__main__.py` | CLI via `argh`: `_dispatch_funcs` SSOT + `dispatch_with_namespaces`. |
+| `ke/__main__.py` | CLI via `cw`: `_dispatch_funcs` SSOT + `mk_parser` / `dispatch_with_namespaces`. `cw.run` *returns* the exit code, so both entry points forward it. |
 
 `ocr/` depends on the `OcrResult` shape only: `OcrResult(text; blocks=[TextBlock(text, bbox, confidence, level, language, meta)]; raw; meta)` with `confidence` normalized to `[0,1]`. This is what makes `ke` able to evaluate *any* `image -> OcrResult` callable, and what keeps `ke -> ocracy` one-directional.
 
