@@ -3,6 +3,14 @@ name: license-gate
 # Fail the build if any copyleft / non-commercial license enters ke's installed
 # dependency closure. License terms in this ecosystem often live only in repo
 # files (invisible to PyPI metadata), so we scan the *resolved* install.
+#
+# ke has no dependencies and no extras since issue #12's reset (the package
+# is reserved, empty, pending a future knowledge-extraction build) -- so this
+# gate currently only guards against a future dependency landing without a
+# license check. Re-add extras to the install step here as real content
+# lands, mirroring ek's gate (see ek's .github/workflows and
+# .github/scripts/check_licenses.py, which superseded this one's LGPL
+# exception -- see the closed #14/#17 for that history).
 on:
   push:
   pull_request:
@@ -15,12 +23,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install ke (core + permissive extras) and the scanner
+      - name: Install ke and the scanner
         run: |
           python -m pip install --upgrade pip
-          # Install the permissive capability tiers; quarantined libs are excluded
-          # by construction (they are not in any extra).
-          pip install ".[all]" pip-licenses
+          pip install "." pip-licenses
       - name: Scan installed dependency closure
         run: |
           pip-licenses --format=csv --with-system > licenses.csv

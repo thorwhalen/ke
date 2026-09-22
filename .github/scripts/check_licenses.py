@@ -1,16 +1,29 @@
 """Fail the build if a copyleft / non-commercial license is in ke's dep closure.
 
-License landmines in this ecosystem hide their terms in repo files, invisible to
-PyPI metadata scanners (e.g. TorchCP is LGPL with a blank PyPI license field;
-surya-ocr ships non-commercial RAIL-M weights behind an "Apache-2.0" classifier).
-This gate reads a ``pip-licenses`` CSV of the *installed* closure and rejects:
+ke has no dependencies since issue #12's reset (the package is reserved,
+empty, pending a future knowledge-extraction build), so this gate currently
+guards an empty closure. It is kept -- and fixed, not just left dormant --
+so the first real dependency a future build adds is checked from day one.
 
-- GPL / AGPL (but allows LGPL -- acceptable for dynamically-linked libraries)
-- Any non-commercial / source-available restriction (RAIL, CC-BY-NC, BUSL, ...)
+Fixed here (was issue #17): the gate used to allow LGPL on the "acceptable
+for a dynamically-linked library" argument, which does not describe a
+pure-Python import -- `pip install` puts an LGPL package's source in the same
+interpreter as ke's, and the relinking right LGPL trades for is meaningless
+there. This mirrors ek's own resolution of the same disagreement (see ek's
+`.github/scripts/check_licenses.py`): the whole GPL family -- GPL, AGPL and
+LGPL -- is now a violation, matching `AGENTS.md`'s eventual licensing
+policy for this repo (no copyleft, ever, as a default).
 
-Two audited override lists (``_ALLOWLIST``, ``_ALLOWLIST_PREFIXES``) clear the
-handful of packages whose metadata trips a substring without carrying the
-restriction this gate is about. Every entry must be justified in a comment.
+License terms in this ecosystem often live only in repo files (invisible to
+PyPI metadata), so this scans the *resolved* install, not just declared
+dependencies, and rejects:
+
+- The whole GPL family (GPL / LGPL / AGPL), in every spelling seen in the
+  wild -- "GPL" catches the abbreviations and classifier tails; "GENERAL
+  PUBLIC" catches spelled-out names with no "GPL" substring (e.g. "GNU
+  Lesser General Public License").
+- Any non-commercial / source-available restriction (RAIL, CC-BY-NC, BUSL,
+  SSPL, Elastic License, ...).
 
 Usage:
     pip-licenses --format=csv --with-system > licenses.csv
@@ -24,9 +37,9 @@ from __future__ import annotations
 import csv
 import sys
 
-# Substrings that mark a forbidden license (matched case-insensitively).
-_GPL = ("GPL", "GNU GENERAL PUBLIC")
-_GPL_ALLOW = ("LGPL", "LESSER")  # LGPL is permitted
+# Substrings that mark a forbidden license (matched case-insensitively). No LGPL
+# escape hatch -- see the module docstring for why.
+_GPL = ("GPL", "GENERAL PUBLIC")
 _NON_COMMERCIAL = (
     "NON-COMMERCIAL",
     "NONCOMMERCIAL",
@@ -38,58 +51,34 @@ _NON_COMMERCIAL = (
     "BUSINESS SOURCE",
     "PROPRIETARY",
     "SSPL",
+    "ELASTIC-2.0",
+    "ELASTIC LICENSE",
+    "ELASTICV2",
 )
 
-# Packages explicitly cleared despite a scary-looking or blank license field.
-# Keep this list short and justified; it is the audited override.
-_ALLOWLIST: set[str] = set()
-
-# Name *prefixes* cleared for the same reason. A prefix (rather than ~15 exact
-# names) is used only where the package family churns with every release of its
-# parent, so an exact list would silently rot.
-#
-#   nvidia-*  The CUDA redistributable wheels (cublas, cudnn, nccl, nvjitlink,
-#             cusparselt, nvshmem, ...) that `torch` pulls in transitively via
-#             `uqlm`. Their metadata reads "NVIDIA Proprietary" /
-#             "Other/Proprietary License", which trips the PROPRIETARY
-#             substring above -- but this gate exists to catch *copyleft* and
-#             *non-commercial* terms, and the CUDA Toolkit EULA grants
-#             redistribution and commercial use of exactly these runtime
-#             components. Closed-source is not the same restriction as
-#             non-commercial, and every torch-based install in the ecosystem
-#             carries them. The set changes name-by-name each torch release,
-#             which is why this is a prefix.
-_ALLOWLIST_PREFIXES: tuple[str, ...] = ("nvidia-",)
-
-
-def _is_allowlisted(name: str) -> bool:
-    """Whether ``name`` is an audited override (exact name or cleared prefix).
-
-    >>> _is_allowlisted("krippendorff")
-    False
-    >>> _is_allowlisted("nvidia-cudnn-cu13")
-    True
-    """
-    return name in _ALLOWLIST or name.lower().startswith(_ALLOWLIST_PREFIXES)
+# Audited overrides go here as real dependencies land -- see ek's own script for
+# the shape (name/prefix allowlists with a dated justification per entry). Empty
+# for now: ke has no dependencies to audit.
+_CLEARED: set[str] = set()
 
 
 def _is_violation(license_text: str) -> str:
-    """The reason ``license_text`` is forbidden, or ``""`` if it is acceptable.
+    """Return why ``license_text`` is forbidden, or ``""`` if it is acceptable.
 
     >>> _is_violation("MIT")
     ''
-    >>> _is_violation("GPL-3.0-or-later")
-    'GPL/AGPL copyleft'
     >>> _is_violation("LGPL-3.0")
-    ''
+    'GPL/LGPL/AGPL copyleft'
+    >>> _is_violation("GNU Affero General Public License v3")
+    'GPL/LGPL/AGPL copyleft'
     >>> _is_violation("CC-BY-NC-4.0")
     'non-commercial / source-available'
     """
     up = license_text.upper()
     if any(nc in up for nc in _NON_COMMERCIAL):
         return "non-commercial / source-available"
-    if any(g in up for g in _GPL) and not any(a in up for a in _GPL_ALLOW):
-        return "GPL/AGPL copyleft"
+    if any(g in up for g in _GPL):
+        return "GPL/LGPL/AGPL copyleft"
     return ""
 
 
@@ -99,7 +88,7 @@ def main(path: str) -> int:
         for row in csv.DictReader(f):
             name = (row.get("Name") or "").strip()
             license_text = (row.get("License") or "").strip()
-            if _is_allowlisted(name):
+            if name in _CLEARED:
                 continue
             reason = _is_violation(license_text)
             if reason:
@@ -110,11 +99,13 @@ def main(path: str) -> int:
         for name, lic, reason in violations:
             print(f"  - {name}: {lic}  [{reason}]")
         print(
-            "\nQuarantine these behind an explicit, opt-in install (never a default "
-            "extra). See skills/ke-dev-licensing."
+            "\nCopyleft/non-commercial dependencies are never a default here -- "
+            "see AGENTS.md."
         )
         return 1
-    print("License gate passed: no copyleft/non-commercial licenses in the closure.")
+    print(
+        "License gate passed: no copyleft/non-commercial licenses in the closure."
+    )
     return 0
 
 
