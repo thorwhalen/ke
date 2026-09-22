@@ -1,4 +1,0 @@
-ke.facade
-=========
-.. automodule:: ke.facade
-   :members:

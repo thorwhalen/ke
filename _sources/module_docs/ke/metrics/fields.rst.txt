@@ -1,4 +1,0 @@
-ke.metrics.fields
-=================
-.. automodule:: ke.metrics.fields
-   :members:

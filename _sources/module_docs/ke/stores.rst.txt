@@ -1,4 +1,0 @@
-ke.stores
-=========
-.. automodule:: ke.stores
-   :members:

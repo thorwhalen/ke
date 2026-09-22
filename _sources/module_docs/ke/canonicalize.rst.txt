@@ -1,4 +1,0 @@
-ke.canonicalize
-===============
-.. automodule:: ke.canonicalize
-   :members:

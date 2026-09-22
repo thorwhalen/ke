@@ -1,0 +1,12 @@
+# ke
+
+> Reserved for a future knowledge-extraction package. Evaluation work that used to live here continues at https://github.com/thorwhalen/ek
+
+
+## Pages in this subsection
+
+- [ke](ke.html.md): &#96;ke&#96; – reserved for a future knowledge-&#42;extraction&#42; package.
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

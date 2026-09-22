@@ -1,4 +1,0 @@
-ke.registry
-===========
-.. automodule:: ke.registry
-   :members:

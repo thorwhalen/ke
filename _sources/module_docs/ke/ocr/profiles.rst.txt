@@ -1,4 +1,0 @@
-ke.ocr.profiles
-===============
-.. automodule:: ke.ocr.profiles
-   :members:

@@ -1,0 +1,20 @@
+# ke
+
+> Reserved for a future knowledge-extraction package. Evaluation work that used to live here continues at https://github.com/thorwhalen/ek
+
+
+## Pages
+
+- [ke](index.html.md): &#42;&#42;Reserved for a future &#42;knowledge-extraction&#42; package.&#42;&#42; Not yet implemented.
+- [API reference](api.html.md): | &#96;ke&#96;   | &#96;ke&#96; -- reserved for a future knowledge-&#42;extraction&#42; package.   |
+- [ke](_autosummary/ke.html.md): &#96;ke&#96; – reserved for a future knowledge-&#42;extraction&#42; package.
+- [For AI agents](ai-agents.html.md): &#96;ke&#96; ships artifacts for coding agents alongside its code. This page lists
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-09-22 14:01 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+
+## Optional
+
+- [ke.md](ke.md): Complete documentation in a single file.
+
+## Build
+
+- [build_info.json](build_info.json): build provenance (commit, version, tool versions, whether the docs match the package)

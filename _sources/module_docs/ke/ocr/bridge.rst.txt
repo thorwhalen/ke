@@ -1,4 +1,0 @@
-ke.ocr.bridge
-=============
-.. automodule:: ke.ocr.bridge
-   :members:

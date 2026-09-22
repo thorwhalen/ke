@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-09-22T14:01:18Z",
+  "package": {
+    "name": "ke",
+    "version": "0.1.1",
+    "display_name": "ke",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "a468bf9c3fb1af98d7560a931bb2d715f38f67de",
+    "short_commit": "a468bf9",
+    "branch": "main",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/thorwhalen/ke",
+    "commit_url": "https://github.com/thorwhalen/ke/commit/a468bf9c3fb1af98d7560a931bb2d715f38f67de",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "thorwhalen/ke",
+    "sha": "a468bf9c3fb1af98d7560a931bb2d715f38f67de",
+    "sha_in_history": true,
+    "ref": "refs/heads/main",
+    "ref_name": "main",
+    "run_id": "35737226631",
+    "run_url": "https://github.com/thorwhalen/ke/actions/runs/35737226631",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.12",
+    "sphinx": "9.1.0",
+    "docutils": "0.22.4",
+    "python": "3.12.14"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "furo",
+    "accent": "#3b51a0",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 1,
+    "objects_documented": 0
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.1.1",
+    "relation": "same",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/thorwhalen/ke && cd ke\ngit checkout a468bf9c3fb1af98d7560a931bb2d715f38f67de\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": true,
+    "notes": []
+  }
+}
